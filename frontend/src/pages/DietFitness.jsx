@@ -11,14 +11,11 @@ const DietFitness = () => {
     height: 175,
     currentWeight: 70,
     activityLevel: 'Moderately Active',
-    goal: 'Build muscle'
+    goal: 'Build muscle',
   });
 
   const [dietPlan, setDietPlan] = useState(null);
   const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const [customFood, setCustomFood] = useState({
     name: '',
     quantity: 1,
@@ -26,9 +23,25 @@ const DietFitness = () => {
     protein: 0,
     carbs: 0,
     fats: 0,
-    mealType: 'breakfast'
+    mealType: 'breakfast',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const hasPlan = !!dietPlan;
+
+  // provide safe default meals so UI always renders
+  const safeMeals = hasPlan
+    ? dietPlan.meals
+    : {
+        breakfast: [],
+        lunch: [],
+        snacks: [],
+        dinner: [],
+      };
+
+  // ---------- FETCH SUMMARY ON LOAD ----------
   useEffect(() => {
     fetchSummary();
   }, []);
@@ -40,7 +53,7 @@ const DietFitness = () => {
       const response = await fetch(`${API_BASE_URL}/summary/${DEMO_USER_ID}`);
       const data = await response.json();
       if (response.ok) {
-        setSummary(data.summary);
+        setSummary(data.summary || null);
         if (data.fullPlan) {
           setDietPlan(data.fullPlan);
         }
@@ -54,18 +67,19 @@ const DietFitness = () => {
     }
   };
 
-  const handleProfileChange = e => {
+  // ---------- PROFILE HANDLERS ----------
+  const handleProfileChange = (e) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       [name]:
         name === 'age' || name === 'height' || name === 'currentWeight'
           ? Number(value)
-          : value
+          : value,
     }));
   };
 
-  const handlePlanCalculation = async e => {
+  const handlePlanCalculation = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -74,7 +88,7 @@ const DietFitness = () => {
       const response = await fetch(`${API_BASE_URL}/plan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: DEMO_USER_ID, ...profile })
+        body: JSON.stringify({ userId: DEMO_USER_ID, ...profile }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -91,18 +105,19 @@ const DietFitness = () => {
     }
   };
 
-  const handleCustomFoodChange = e => {
+  // ---------- CUSTOM FOOD HANDLERS ----------
+  const handleCustomFoodChange = (e) => {
     const { name, value } = e.target;
-    setCustomFood(prev => ({
+    setCustomFood((prev) => ({
       ...prev,
       [name]:
         ['quantity', 'calories', 'protein', 'carbs', 'fats'].includes(name)
           ? Number(value)
-          : value
+          : value,
     }));
   };
 
-  const handleCustomFoodSubmit = async e => {
+  const handleCustomFoodSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -112,7 +127,7 @@ const DietFitness = () => {
       const response = await fetch(`${API_BASE_URL}/custom-food-entry`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: DEMO_USER_ID, mealType, foodItem })
+        body: JSON.stringify({ userId: DEMO_USER_ID, mealType, foodItem }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -125,7 +140,7 @@ const DietFitness = () => {
           protein: 0,
           carbs: 0,
           fats: 0,
-          mealType: 'breakfast'
+          mealType: 'breakfast',
         });
       } else {
         setError(data.message || 'Failed to add custom food.');
@@ -137,20 +152,25 @@ const DietFitness = () => {
     }
   };
 
+  // ---------- UI ----------
   return (
     <div className="page">
       <div className="page-card">
         <h2>🍎 Diet &amp; Fitness Planner</h2>
         <p className="page-tagline">
-          Calculate your macros, generate a meal plan and log your custom foods.
+          Calculate your macros, generate a daily meal plan, and log your own foods to keep
+          track of calories and nutrition.
         </p>
 
         {loading && <p>Loading...</p>}
-        {error && <p style={{ color: 'var(--danger-color)' }}>Error: {error}</p>}
+        {error && (
+          <p style={{ color: 'var(--danger-color)' }}>
+            Error: {error}
+          </p>
+        )}
 
-        {/* TOP ROW – PROFILE + SUMMARY */}
+        {/* TOP ROW: PROFILE + SUMMARY */}
         <div className="card-grid">
-          {/* Profile / Goal card */}
           <div className="feature-card">
             <h3>Your Goal &amp; Profile</h3>
             <form onSubmit={handlePlanCalculation}>
@@ -209,169 +229,180 @@ const DietFitness = () => {
               <button
                 type="submit"
                 disabled={loading}
-                style={{ backgroundColor: 'var(--success-color)' }}
+                style={{ backgroundColor: 'var(--primary-green)' }}
               >
                 Calculate &amp; Get Plan
               </button>
             </form>
           </div>
 
-          {/* Summary / Macros card */}
-          {dietPlan && summary && (
-            <div
-              className="feature-card"
-              style={{ border: '2px solid var(--primary-blue)' }}
-            >
-              <h3>Daily Summary &amp; Macros</h3>
-              <h4>Recommended Daily:</h4>
-              <p>
-                <strong>Calories:</strong> {dietPlan.recommendedMacros.calories} kcal
-              </p>
-              <p>
-                <strong>Protein:</strong> {dietPlan.recommendedMacros.protein} g
-              </p>
-              <p>
-                <strong>Carbs:</strong> {dietPlan.recommendedMacros.carbs} g
-              </p>
-              <p>
-                <strong>Fats:</strong> {dietPlan.recommendedMacros.fats} g
-              </p>
+          <div className="feature-card" style={{ border: '2px solid var(--primary-blue)' }}>
+            <h3>Daily Summary &amp; Macros</h3>
 
-              <hr />
+            {hasPlan ? (
+              <>
+                <h4>Recommended Daily:</h4>
+                <p>
+                  <strong>Calories:</strong> {dietPlan.recommendedMacros.calories} kcal
+                </p>
+                <p>
+                  <strong>Protein:</strong> {dietPlan.recommendedMacros.protein} g
+                </p>
+                <p>
+                  <strong>Carbs:</strong> {dietPlan.recommendedMacros.carbs} g
+                </p>
+                <p>
+                  <strong>Fats:</strong> {dietPlan.recommendedMacros.fats} g
+                </p>
+              </>
+            ) : (
+              <p style={{ color: '#555' }}>
+                Click <strong>Calculate &amp; Get Plan</strong> to see your recommended daily
+                macros here.
+              </p>
+            )}
 
-              {summary && (
-                <>
-                  <h4>Today&apos;s Intake So Far:</h4>
-                  <p>
-                    <strong>Calories:</strong> {summary.totalCalories} kcal
-                  </p>
-                  <p>
-                    <strong>Protein:</strong> {summary.totalProtein} g
-                  </p>
-                  <p>
-                    <strong>Carbs:</strong> {summary.totalCarbs} g
-                  </p>
-                  <p>
-                    <strong>Fats:</strong> {summary.totalFats} g
-                  </p>
-                </>
-              )}
-            </div>
-          )}
+            {summary && (
+              <>
+                <hr />
+                <h4>Logged Today:</h4>
+                <p>
+                  <strong>Calories:</strong> {summary.totalCalories} kcal
+                </p>
+                <p>
+                  <strong>Protein:</strong> {summary.totalProtein} g
+                </p>
+                <p>
+                  <strong>Carbs:</strong> {summary.totalCarbs} g
+                </p>
+                <p>
+                  <strong>Fats:</strong> {summary.totalFats} g
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
-        {/* MEAL PLAN GRID */}
-        {dietPlan && (
-          <>
-            <h3 style={{ marginTop: '2.5rem' }}>
-              Daily Meal Plan ({dietPlan.goal} Goal)
-            </h3>
-            <div className="meal-grid">
-              {['breakfast', 'lunch', 'snacks', 'dinner'].map(mealKey => (
-                <div key={mealKey} className="feature-card">
-                  <h4>{mealKey.charAt(0).toUpperCase() + mealKey.slice(1)}</h4>
-                  {dietPlan.meals[mealKey].length === 0 ? (
+        {/* ALWAYS-SHOWN MEAL PLAN ROW */}
+        <div style={{ marginTop: '3rem' }}>
+          <h3>
+            Daily Meal Plan {hasPlan && `(${dietPlan.goal} Goal)`}
+          </h3>
+
+          <div className="meal-grid">
+            {['breakfast', 'lunch', 'snacks', 'dinner'].map((mealKey) => (
+              <div key={mealKey} className="feature-card">
+                <h4>{mealKey.charAt(0).toUpperCase() + mealKey.slice(1)}</h4>
+                {hasPlan ? (
+                  safeMeals[mealKey].length === 0 ? (
                     <p>No items logged yet.</p>
                   ) : (
                     <ul>
-                      {dietPlan.meals[mealKey].map((item, index) => (
+                      {safeMeals[mealKey].map((item, index) => (
                         <li key={index}>
                           <strong>{item.name}</strong> ({item.calories} kcal,{' '}
                           {item.protein}P/{item.carbs}C/{item.fats}F)
                         </li>
                       ))}
                     </ul>
-                  )}
+                  )
+                ) : (
+                  <p style={{ color: '#777' }}>
+                    Calculate your plan above to see suggested foods here.
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* ALWAYS-SHOWN CUSTOM FOOD + FITNESS ROW */}
+          <div className="diet-two-col" style={{ marginTop: '3rem' }}>
+            {/* LEFT: Custom Food Entry */}
+            <div className="feature-card">
+              <h4>➕ Custom Food Entry</h4>
+              <form onSubmit={handleCustomFoodSubmit} className="food-entry">
+                {/* Row 1: meal type + name */}
+                <div className="food-entry-row2">
+                  <select
+                    name="mealType"
+                    value={customFood.mealType}
+                    onChange={handleCustomFoodChange}
+                  >
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="snacks">Snacks</option>
+                    <option value="dinner">Dinner</option>
+                  </select>
+
+                  <input
+                    name="name"
+                    type="text"
+                    placeholder="Food Name"
+                    value={customFood.name}
+                    onChange={handleCustomFoodChange}
+                    required
+                  />
                 </div>
-              ))}
+
+                {/* Row 2: 4 numbers */}
+                <div className="food-entry-row3">
+                  <input
+                    name="calories"
+                    type="number"
+                    placeholder="Calories"
+                    value={customFood.calories}
+                    onChange={handleCustomFoodChange}
+                    required
+                  />
+                  <input
+                    name="protein"
+                    type="number"
+                    placeholder="Protein (g)"
+                    value={customFood.protein}
+                    onChange={handleCustomFoodChange}
+                    required
+                  />
+                  <input
+                    name="carbs"
+                    type="number"
+                    placeholder="Carbs (g)"
+                    value={customFood.carbs}
+                    onChange={handleCustomFoodChange}
+                    required
+                  />
+                  <input
+                    name="fats"
+                    type="number"
+                    placeholder="Fats (g)"
+                    value={customFood.fats}
+                    onChange={handleCustomFoodChange}
+                    required
+                  />
+                </div>
+
+                {/* Row 3: button below */}
+                <button type="submit" className="log-btn" disabled={loading}>
+                  Add to Log
+                </button>
+              </form>
             </div>
 
-            {/* CUSTOM FOOD + FITNESS – TWO COLUMN LAYOUT */}
-            <div className="diet-two-col" style={{ marginTop: '2.5rem' }}>
-              {/* LEFT – Custom food entry */}
-              <div className="feature-card">
-                <h4>➕ Custom Food Entry</h4>
-                <form onSubmit={handleCustomFoodSubmit} className="food-entry">
-                  {/* Row 1 */}
-                  <div className="food-entry-row2">
-                    <select
-                      name="mealType"
-                      value={customFood.mealType}
-                      onChange={handleCustomFoodChange}
-                    >
-                      <option value="breakfast">Breakfast</option>
-                      <option value="lunch">Lunch</option>
-                      <option value="snacks">Snacks</option>
-                      <option value="dinner">Dinner</option>
-                    </select>
-
-                    <input
-                      name="name"
-                      type="text"
-                      placeholder="Food Name"
-                      value={customFood.name}
-                      onChange={handleCustomFoodChange}
-                      required
-                    />
-                  </div>
-
-                  {/* Row 2 – 4 numeric fields */}
-                  <div className="food-entry-row3">
-                    <input
-                      name="calories"
-                      type="number"
-                      placeholder="Calories"
-                      value={customFood.calories}
-                      onChange={handleCustomFoodChange}
-                      required
-                    />
-                    <input
-                      name="protein"
-                      type="number"
-                      placeholder="Protein (g)"
-                      value={customFood.protein}
-                      onChange={handleCustomFoodChange}
-                      required
-                    />
-                    <input
-                      name="carbs"
-                      type="number"
-                      placeholder="Carbs (g)"
-                      value={customFood.carbs}
-                      onChange={handleCustomFoodChange}
-                      required
-                    />
-                    <input
-                      name="fats"
-                      type="number"
-                      placeholder="Fats (g)"
-                      value={customFood.fats}
-                      onChange={handleCustomFoodChange}
-                      required
-                    />
-                  </div>
-
-                  {/* Button row */}
-                  <button type="submit" className="log-btn" disabled={loading}>
-                    Add to Log
-                  </button>
-                </form>
-              </div>
-
-              {/* RIGHT – Simple fitness planner */}
-              <div className="feature-card">
-                <h3>💪 Simple Fitness Planner</h3>
-                <p>Placeholder for your weekly schedule:</p>
-                <ul>
-                  <li>Workout: 3 days/week</li>
-                  <li>Running/Walking: 4 days/week</li>
-                  <li>Sleep Suggestion: 7–9 hours/night</li>
-                </ul>
-                <button>Manage Weekly Schedule (Future Feature)</button>
-              </div>
+            {/* RIGHT: Simple Fitness Planner */}
+            <div className="feature-card">
+              <h3>💪 Simple Fitness Planner</h3>
+              <p>Basic weekly structure you can follow:</p>
+              <ul>
+                <li>Workout: 3 days/week (strength or resistance)</li>
+                <li>Cardio: 3–4 days/week (walking, jogging, cycling)</li>
+                <li>Steps goal: 7,000–10,000 steps/day</li>
+                <li>Sleep: 7–9 hours/night</li>
+              </ul>
+              <button type="button">
+                Manage Weekly Schedule (Future Feature)
+              </button>
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );
