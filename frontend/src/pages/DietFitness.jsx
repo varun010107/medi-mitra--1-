@@ -181,9 +181,9 @@ const DietFitness = () => {
                 onChange={handleProfileChange}
                 required
               >
-                <option value="Lose weight">Lose weight</option>
-                <option value="Build muscle">Build muscle</option>
-                <option value="Gain weight">Gain weight</option>
+                <option value="Lose weight">Lose Weight</option>
+                <option value="Build muscle">Build Muscle</option>
+                <option value="Gain weight">Gain Weight</option>
               </select>
 
               <label>Age (years):</label>
