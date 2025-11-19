@@ -1,0 +1,565 @@
+/* ============================= */
+/*   GLOBAL THEME               */
+/* ============================= */
+
+:root {
+  --primary-blue: #4A90E2;
+  --primary-green: #50C878;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --transition-fast: 0.25s ease;
+}
+
+/* Full-page gradient for ALL pages */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #222;
+}
+
+/* Main app container */
+main.container {
+  padding: 2rem 1.5rem 3rem;
+  min-height: calc(100vh - 80px);
+}
+
+/* ============================= */
+/*   NAVBAR                     */
+/* ============================= */
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 2rem;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+nav div a {
+  margin-left: 1.3rem;
+  color: #222;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.98rem;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+nav div a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: var(--primary-green);
+  transition: var(--transition-fast);
+}
+
+nav div a:hover {
+  color: var(--primary-green);
+}
+
+nav div a:hover::after {
+  width: 100%;
+}
+
+/* ============================= */
+/*   HOME PAGE (YOU ALREADY HAVE)
+/*   BUT WE KEEP IT NICE        */
+/* ============================= */
+
+.home-container {
+  width: 100%;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 3.5rem 2rem;
+  background: rgba(255,255,255,0.12);
+  border-radius: 0 0 30px 30px;
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+.hero-content {
+  max-width: 520px;
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 0.8rem;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.hero-button {
+  margin-top: 1.8rem;
+  padding: 0.85rem 2.2rem;
+  border-radius: 999px;
+  border: none;
+  background: #fff;
+  color: var(--primary-blue);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  transition: var(--transition-fast);
+}
+
+.hero-button:hover {
+  transform: translateY(-2px);
+  background: #f5f9ff;
+}
+
+.hero-image img,
+.hero-illustration {
+  width: 700px;
+  max-width: 40vw;
+  height: auto;
+  filter: drop-shadow(0 10px 32px rgba(0,0,0,0.35));
+}
+
+/* Features section on home */
+.section-title {
+  text-align: center;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
+  padding: 1rem 0 2.5rem;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  padding: 1.7rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition-fast);
+}
+
+.feature-card h3 {
+  margin-top: 0;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+}
+
+.feature-button {
+  width: 100%;
+  background: var(--primary-blue);
+  padding: 0.8rem;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: var(--transition-fast);
+}
+
+.feature-button:hover {
+  background: var(--primary-green);
+}
+
+/* ============================= */
+/*   GENERIC PAGE LAYOUT        */
+/*   (APPLIES TO ALL OTHER PAGES)
+/* ============================= */
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.page-card {
+  width: 100%;
+  max-width: 1100px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 2rem 2.2rem;
+}
+
+/* page headings */
+.page-card h2 {
+  margin-top: 0;
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.page-tagline {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+/* If you use sections inside a page */
+.section-block {
+  margin-top: 1.8rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #ddd;
+}
+
+/* ============================= */
+/*   FORMS / INPUTS / LABELS    */
+/* ============================= */
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.7rem 0rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #dde2ee;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 0.95rem;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(74,144,226,0.3);
+}
+
+/* Buttons */
+button {
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+button:hover {
+  background: var(--primary-green);
+  transform: translateY(-1px);
+}
+
+/* Tables / lists (lab tests/appointments) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.92rem;
+}
+
+th, td {
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid #e2e6f0;
+}
+
+th {
+  text-align: left;
+  background: rgba(74,144,226,0.08);
+}
+
+.food-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.food-entry-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+  gap: 1rem;
+}
+
+.log-btn {
+  width: 200px;
+  align-self: flex-start; /* keeps button on left (optional) */
+}
+
+.diet-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.food-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.food-entry-row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.food-entry-row3 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.log-btn {
+  width: 180px;
+  align-self: flex-start;
+}
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+/* style the textarea */
+.feature-card textarea {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  resize: vertical;
+  font-size: 1rem;
+}
+
+/* improve headings inside results */
+.feature-card h3 {
+  margin-bottom: 0.7rem;
+  font-weight: 700;
+}
+
+/* disclaimer box */
+.disclaimer {
+  background: rgba(255, 120, 120, 0.2);
+  padding: 1rem;
+  border-radius: 10px;
+  color: #700;
+  font-size: 0.95rem;
+}
+/* Lab tests page layout */
+.lab-layout {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* left column – scrollable list */
+.lab-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lab-list-item {
+  cursor: pointer;
+}
+
+/* right column – detail card */
+.lab-detail {
+  min-height: 200px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .lab-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Doctor page 2-column layout */
+.doctor-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Scroll area for doctor list */
+.doctor-list-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Individual doctor card */
+.doctor-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px);
+}
+
+.doctor-card-selected {
+  border: 2px solid var(--primary-blue);
+}
+
+/* Small button inside card */
+.small-btn {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+}
+
+/* Booking form row layout */
+.doctor-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Upcoming appointments list */
+.appointments-list {
+  margin-top: 0.8rem;
+  padding-left: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .doctor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* Extra polish for home hero */
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
+  margin-bottom: 0.8rem;
+}
+
+.hero-title span {
+  color: #e9f7ff;
+}
+
+.hero-actions {
+  margin-top: 1.8rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-button-secondary {
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.hero-button-secondary:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+/* stats strip under hero text */
+.hero-stats {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.hero-stats div {
+  background: rgba(255,255,255,0.14);
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  min-width: 140px;
+}
+
+.hero-stats strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.hero-illustration {
+  width: 320px;
+  max-width: 40vw;
+  height: auto;
+  filter: drop-shadow(0 10px 32px rgba(0,0,0,0.35));
+}
+
+/* small tweak for responsiveness */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .hero-stats {
+    justify-content: flex-start;
+  }
+}
+
+
+/* Rounded + softened hero image */
+.rounded-soft {
+  border-radius: 22px;         /* rounded corners */
+  padding: 6px;                /* soft spacing around */
+  background: rgba(255,255,255,0.22); /* subtle soft-glass backdrop */
+  backdrop-filter: blur(6px);  /* soft blur glow */
+  box-shadow: 0 8px 26px rgba(0,0,0,0.22); /* soft shadow */
+}

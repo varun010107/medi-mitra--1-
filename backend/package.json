@@ -1,0 +1,20 @@
+{
+  "name": "medi-mitra-backend",
+  "version": "1.0.0",
+  "description": "Medi Mitra healthcare app backend (Express + MongoDB)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "mongoose": "^8.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
